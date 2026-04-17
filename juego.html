@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>Actividad: Toma de Decisiones (TBL)</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --bg: #f4f7f6;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .instrucciones {
+            background: #eaf2f8;
+            padding: 15px;
+            border-left: 5px solid var(--secondary);
+            border-radius: 5px;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 1.05em;
+        }
+        textarea {
+            width: 100%;
+            height: 90px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1em;
+            resize: vertical;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
+        }
+        .error-msg {
+            color: var(--danger);
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+            font-weight: bold;
+        }
+        button {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto 0;
+            width: 100%;
+            max-width: 300px;
+            transition: transform 0.2s, background 0.3s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(39, 174, 96, 0.3);
+        }
+        button:hover {
+            background-color: #219653;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(39, 174, 96, 0.4);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        #resultado {
+            display: none;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        .resultado-item {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .resultado-item h4 {
+            margin: 0 0 10px 0;
+            color: var(--secondary);
+        }
+        .metacognicion {
+            background: #e8f6ef;
+            border-left: 5px solid var(--success);
+            padding: 20px;
+            border-radius: 5px;
+            font-style: italic;
+            font-size: 1.1em;
+            color: #2c3e50;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Reto de Pensamiento (TBL)</h1>
+
+    <div id="seccion-actividad">
+        <div class="instrucciones">
+            <strong>Escenario:</strong> <em>"El Ministerio de Educación propone sustituir todos los libros físicos e infraestructura de bibliotecas por gafas de Realidad Virtual para todos los estudiantes del país."</em><br><br>
+            Aplica la rutina de pensamiento. <strong>Nota:</strong> No se permite copiar y pegar, debes redactar tus ideas. Solo se admiten letras y números.
+        </div>
+
+        <div class="form-group">
+            <label for="opciones">1. Generar Opciones: ¿Cuáles son las alternativas a esta propuesta?</label>
+            <textarea id="opciones" placeholder="Escribe tus alternativas aquí..."></textarea>
+            <div class="error-msg" id="err-opciones">Debe contener texto (no solo números) y no estar vacío.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="consecuencias">2. Predecir Consecuencias: ¿Qué impacto tendría esta medida?</label>
+            <textarea id="consecuencias" placeholder="Analiza pros y contras..."></textarea>
+            <div class="error-msg" id="err-consecuencias">Debe contener texto (no solo números) y no estar vacío.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="decision">3. Decisión Fundamentada: ¿Cuál es tu veredicto final?</label>
+            <textarea id="decision" placeholder="Redacta tu conclusión..."></textarea>
+            <div class="error-msg" id="err-decision">Debe contener texto (no solo números) y no estar vacío.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="metacognicion">4. Metacognición: ¿Cómo cambió tu opinión tras este análisis?</label>
+            <textarea id="metacognicion" placeholder="Reflexiona sobre tu proceso de pensamiento..."></textarea>
+            <div class="error-msg" id="err-metacognicion">Debe contener texto (no solo números) y no estar vacío.</div>
+        </div>
+
+        <button onclick="procesarActividad()">Generar Mapa de Pensamiento</button>
+    </div>
+
+    <div id="resultado">
+        <h2 style="color: var(--success); text-align: center; margin-bottom: 30px;">¡Análisis Completado con Éxito!</h2>
+        
+        <div class="resultado-item">
+            <h4>1. Opciones Analizadas</h4>
+            <p id="res-opciones"></p>
+        </div>
+        
+        <div class="resultado-item">
+            <h4>2. Consecuencias Previstas</h4>
+            <p id="res-consecuencias"></p>
+        </div>
+        
+        <div class="resultado-item">
+            <h4>3. Decisión Final</h4>
+            <p id="res-decision"></p>
+        </div>
+        
+        <div class="metacognicion">
+            <h4 style="color: var(--success); margin-top:0;">4. Reflexión Metacognitiva</h4>
+            "<span id="res-metacognicion"></span>"
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. Aplicar restricciones a todos los textareas
+    const textareas = document.querySelectorAll('textarea');
+    
+    textareas.forEach(ta => {
+        // Bloquear copiar/pegar/cortar
+        ta.addEventListener('paste', e => e.preventDefault());
+        ta.addEventListener('copy', e => e.preventDefault());
+        ta.addEventListener('cut', e => e.preventDefault());
+
+        // Forzar solo letras, números y espacios en tiempo real
+        ta.addEventListener('input', function() {
+            // Regex: permite letras (con tildes y ñ), números, espacios y retornos de carro
+            this.value = this.value.replace(/[^a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ\n]/g, '');
+        });
+    });
+
+    // Función de sanitización (Evita XSS)
+    function sanitizeHTML(str) {
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Función principal
+    function procesarActividad() {
+        let isValid = true;
+        const campos = ['opciones', 'consecuencias', 'decision', 'metacognicion'];
+        const valores = {};
+
+        // 2. Validación estricta al enviar
+        campos.forEach(id => {
+            const el = document.getElementById(id);
+            const errorEl = document.getElementById('err-' + id);
+            const valor = el.value.trim();
+            
+            // Verifica que no esté vacío y que contenga al menos una letra (rechaza si son puros números)
+            const contieneLetra = /[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(valor);
+
+            if (valor === '' || !contieneLetra) {
+                errorEl.style.display = 'block';
+                el.style.borderColor = 'var(--danger)';
+                isValid = false;
+            } else {
+                errorEl.style.display = 'none';
+                el.style.borderColor = '#ddd';
+                // Sanitizar y guardar valor formateado manteniendo saltos de línea
+                valores[id] = sanitizeHTML(valor).replace(/\n/g, '<br>');
+            }
+        });
+
+        // Si pasa la validación
+        if (isValid) {
+            // 3. Imprimir resultados
+            document.getElementById('res-opciones').innerHTML = valores.opciones;
+            document.getElementById('res-consecuencias').innerHTML = valores.consecuencias;
+            document.getElementById('res-decision').innerHTML = valores.decision;
+            document.getElementById('res-metacognicion').innerHTML = valores.metacognicion;
+
+            // 4. Transición UI: Ocultar formulario, limpiar campos y mostrar resultados
+            document.getElementById('seccion-actividad').style.display = 'none';
+            document.getElementById('resultado').style.display = 'block';
+            
+            // Limpiar los inputs para que no queden datos en memoria
+            campos.forEach(id => {
+                document.getElementById(id).value = '';
+            });
+        }
+    }
+</script>
+
+</body>
+</html>
