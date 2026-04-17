@@ -140,31 +140,31 @@
     <div id="seccion-actividad">
         <div class="instrucciones">
             <strong>Escenario:</strong> <em>"El Ministerio de Educación propone sustituir todos los libros físicos e infraestructura de bibliotecas por gafas de Realidad Virtual para todos los estudiantes del país."</em><br><br>
-            Aplica la rutina de pensamiento. <strong>Nota:</strong> No se permite copiar y pegar, debes redactar tus ideas. Solo se admiten letras y números.
+            Aplica la rutina de pensamiento. <strong>Nota:</strong> No se permite copiar y pegar, debes argumentar tus ideas con profundidad.
         </div>
 
         <div class="form-group">
             <label for="opciones">1. Generar Opciones: ¿Cuáles son las alternativas a esta propuesta?</label>
-            <textarea id="opciones" placeholder="Escribe tus alternativas aquí..."></textarea>
-            <div class="error-msg" id="err-opciones">Debe contener texto (no solo números) y no estar vacío.</div>
+            <textarea id="opciones" placeholder="Analiza y describe al menos dos alternativas (Mínimo 5 palabras)..."></textarea>
+            <div class="error-msg" id="err-opciones">Argumento insuficiente. Aplica el pensamiento profundo (mínimo 5 palabras distintas).</div>
         </div>
 
         <div class="form-group">
             <label for="consecuencias">2. Predecir Consecuencias: ¿Qué impacto tendría esta medida?</label>
-            <textarea id="consecuencias" placeholder="Analiza pros y contras..."></textarea>
-            <div class="error-msg" id="err-consecuencias">Debe contener texto (no solo números) y no estar vacío.</div>
+            <textarea id="consecuencias" placeholder="Analiza pros y contras fundamentados (Mínimo 5 palabras)..."></textarea>
+            <div class="error-msg" id="err-consecuencias">Argumento insuficiente. Faltan evidencias en tus consecuencias (mínimo 5 palabras distintas).</div>
         </div>
 
         <div class="form-group">
             <label for="decision">3. Decisión Fundamentada: ¿Cuál es tu veredicto final?</label>
-            <textarea id="decision" placeholder="Redacta tu conclusión..."></textarea>
-            <div class="error-msg" id="err-decision">Debe contener texto (no solo números) y no estar vacío.</div>
+            <textarea id="decision" placeholder="Redacta tu conclusión detallada (Mínimo 5 palabras)..."></textarea>
+            <div class="error-msg" id="err-decision">Decisión muy breve. Justifica mejor tu veredicto (mínimo 5 palabras distintas).</div>
         </div>
 
         <div class="form-group">
             <label for="metacognicion">4. Metacognición: ¿Cómo cambió tu opinión tras este análisis?</label>
-            <textarea id="metacognicion" placeholder="Reflexiona sobre tu proceso de pensamiento..."></textarea>
-            <div class="error-msg" id="err-metacognicion">Debe contener texto (no solo números) y no estar vacío.</div>
+            <textarea id="metacognicion" placeholder="Reflexiona sobre tu proceso: 'Antes pensaba que... pero ahora...' (Mínimo 5 palabras)..."></textarea>
+            <div class="error-msg" id="err-metacognicion">Falta reflexión metacognitiva real. Profundiza tu respuesta (mínimo 5 palabras distintas).</div>
         </div>
 
         <button onclick="procesarActividad()">Generar Mapa de Pensamiento</button>
@@ -196,67 +196,63 @@
 </div>
 
 <script>
-    // 1. Aplicar restricciones a todos los textareas
     const textareas = document.querySelectorAll('textarea');
     
     textareas.forEach(ta => {
-        // Bloquear copiar/pegar/cortar
+        // Bloqueo estricto de portapapeles
         ta.addEventListener('paste', e => e.preventDefault());
         ta.addEventListener('copy', e => e.preventDefault());
         ta.addEventListener('cut', e => e.preventDefault());
 
-        // Forzar solo letras, números y espacios en tiempo real
+        // Filtro de caracteres permitidos
         ta.addEventListener('input', function() {
-            // Regex: permite letras (con tildes y ñ), números, espacios y retornos de carro
-            this.value = this.value.replace(/[^a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ\n]/g, '');
+            this.value = this.value.replace(/[^a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ\n.,;:¿?¡!]/g, '');
         });
     });
 
-    // Función de sanitización (Evita XSS)
     function sanitizeHTML(str) {
         return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    // Función principal
     function procesarActividad() {
         let isValid = true;
         const campos = ['opciones', 'consecuencias', 'decision', 'metacognicion'];
         const valores = {};
 
-        // 2. Validación estricta al enviar
         campos.forEach(id => {
             const el = document.getElementById(id);
             const errorEl = document.getElementById('err-' + id);
             const valor = el.value.trim();
             
-            // Verifica que no esté vacío y que contenga al menos una letra (rechaza si son puros números)
-            const contieneLetra = /[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(valor);
+            // Convertir a un array de palabras, ignorando espacios múltiples
+            const palabras = valor.split(/\s+/).filter(word => word.length > 0);
+            
+            // Crear un Set con las palabras en minúscula para evitar que repitan "hola hola hola"
+            const palabrasUnicas = new Set(palabras.map(w => w.toLowerCase()));
 
-            if (valor === '' || !contieneLetra) {
+            // Validaciones combinadas:
+            // 1. Que tenga al menos 5 palabras en total.
+            // 2. Que de esas, al menos 4 sean palabras distintas (filtro anti-spam).
+            if (palabras.length < 5 || palabrasUnicas.size < 4) {
                 errorEl.style.display = 'block';
                 el.style.borderColor = 'var(--danger)';
                 isValid = false;
             } else {
                 errorEl.style.display = 'none';
                 el.style.borderColor = '#ddd';
-                // Sanitizar y guardar valor formateado manteniendo saltos de línea
                 valores[id] = sanitizeHTML(valor).replace(/\n/g, '<br>');
             }
         });
 
-        // Si pasa la validación
         if (isValid) {
-            // 3. Imprimir resultados
             document.getElementById('res-opciones').innerHTML = valores.opciones;
             document.getElementById('res-consecuencias').innerHTML = valores.consecuencias;
             document.getElementById('res-decision').innerHTML = valores.decision;
             document.getElementById('res-metacognicion').innerHTML = valores.metacognicion;
 
-            // 4. Transición UI: Ocultar formulario, limpiar campos y mostrar resultados
             document.getElementById('seccion-actividad').style.display = 'none';
             document.getElementById('resultado').style.display = 'block';
             
-            // Limpiar los inputs para que no queden datos en memoria
             campos.forEach(id => {
                 document.getElementById(id).value = '';
             });
